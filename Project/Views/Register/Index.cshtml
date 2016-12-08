@@ -1,0 +1,101 @@
+﻿@model Project.Models.UserDetail
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>註冊帳號</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        ul {
+            list-style-type: none;
+            margin-bottom: 13px;
+        }
+    </style>
+</head>
+<body>
+
+    @using (Html.BeginForm("Register", "Register", FormMethod.Post, new { name = "Register" }))
+    {
+        <div id="menu" style="width:100%;">
+            <ul id="fieldlist">
+                <li style="float:left;">
+                    @Html.TextBoxFor(Models => Models.UserAccount, new { type = "required", required = "required", @id = "RegisterUserAccount", @class = "textbox", placeholder = "帳號" })
+                    <button id="check" class="k-button">檢查帳號</button><br />
+                    <label id="CheckMessage"></label>
+                </li>
+                <li style="float:left;">
+                    @Html.TextBoxFor(Models => Models.UserPassword, new { type = "Password", required = "required", @id = "RegisterUserPassword", @class = "textbox", placeholder = "密碼", @onblur = "checkPass()" })
+                </li>
+                <li style="float:left;">
+                    <input type="password" id="UserPasswordAgain" class="textbox" required placeholder="再次輸入密碼" onblur="checkPass()" />
+                    <label id="sign"></label>
+                </li>
+
+                <li style="float:left;">
+                    @Html.TextBoxFor(Models => Models.UserName, new { required = "required", @class = "textbox", placeholder = "使用者名稱" })
+                </li>
+                <li style="float:left;">
+                    <label for="UserSex">性別：</label>
+                    @Html.RadioButtonFor(Models => Models.UserSex, "1", new { required = "required" }) Male
+                    @Html.RadioButtonFor(Models => Models.UserSex, "2", new { required = "required" }) Female
+                </li>
+                <li style="float:left;">
+                    @Html.TextBoxFor(Models => Models.UserEmail, new { type = "email", required = "required", @class = "textbox", placeholder = "Email" })
+                </li>
+                <li style="float:left;">
+                    <button type="submit" class="k-button" id="button1">確認送出</button>
+                </li>
+            </ul>
+        </div>
+
+
+
+    }
+
+    <script>
+        $(".textbox").kendoMaskedTextBox();
+        $("#check").click(function (e) {
+
+            $.ajax({
+                type: "POST",
+                url: "/Register/checkRegister",
+                data: { "RegisterUserAccount": $("#RegisterUserAccount").val() },
+                dataType: "json",
+                success: function (response) {
+                    if (response >= 1) {
+                        document.getElementById("CheckMessage").style.color = "red";
+                        document.getElementById("CheckMessage").innerHTML = "此帳號已存在";
+                    }
+                    else {
+                        document.getElementById("CheckMessage").style.color = "green";
+                        document.getElementById("CheckMessage").innerHTML = "此帳號可使用";
+                    }
+                }
+            });
+            return false;
+        });
+        function checkPass() {
+            if ($("#RegisterUserPassword").val() != "") {
+                if ($("#RegisterUserPassword").val() == $("#UserPasswordAgain").val()) {
+                    document.getElementById("sign").style.color = "green";
+                    document.getElementById("sign").innerHTML = "V";
+                    document.getElementById("button1").disabled = false;
+                }
+                else {
+                    document.getElementById("sign").style.color = "red";
+                    document.getElementById("sign").innerHTML = "X";
+                    document.getElementById("button1").disabled = true
+                }
+            }
+
+        }
+    </script>
+</body>
+</html>

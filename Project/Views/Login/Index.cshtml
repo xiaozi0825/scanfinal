@@ -1,0 +1,107 @@
+﻿@model Project.Models.UserDetail
+<!DOCTYPE html>
+<html>
+<head style="height:100%">
+    <meta name="viewport" content="width=device-width">
+    <title>高雄旅遊小助手</title>
+
+</head>
+<body id="background">
+    <div id="work">
+        <table align="center">
+            <tr align="center">
+                <td >
+                    <img src="~/img/LOGIN.png" />
+                </td>
+            </tr>
+            <tr align="center">
+                <td>
+                    @Html.TextBoxFor(Models => Models.UserAccount, new { type = "required", required = "required", placeholder = "請輸入帳號", @class = "textbox", })
+                </td>
+            </tr>
+            <tr align="center">
+                <td>
+                    @Html.TextBoxFor(Models => Models.UserPassword, new { type = "Password", required = "required", placeholder = "請輸入密碼", @class = "textbox" })
+                </td>
+            </tr>
+            <tr align="center">
+                <td>
+                    <button id="Login" class="k-button">登入</button>
+                    <button id="Register" class="k-button">註冊</button>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+    <div id="window"></div>
+</body>
+</html>
+<script>
+    $(".textbox").kendoMaskedTextBox();
+    $("#Login").click(function (e) {
+
+        $.ajax({
+            type: "POST",
+            url: "/Login/UserLogin",
+            data: {
+                "UserAccount": $("#UserAccount").val(),
+                "UserPassword": $("#UserPassword").val(),
+            },
+            dataType: "json",
+            success: function (response) {
+                if (response.length != 0) {
+                    sessionStorage.setItem('useraccount', response[0].UserAccount);
+                    sessionStorage.setItem('userid', response[0].UserId);
+                    document.location.href = "../HomePage/Index";
+                }
+                else {
+                    document.getElementById("loginMessage").style.color = "red";
+                    document.getElementById("loginMessage").innerHTML = "帳號或密碼錯誤";
+                }
+            }
+        });
+        return false;
+    });
+    $("#Register").click(function () {
+
+        $("#window").kendoWindow({
+            width: "380px",
+            height: "410px",
+            title: "註冊",
+            actions: ["Refresh", "Close"],
+            content: "../Register/Index",
+            visible: false,
+            modal: true,
+            draggable: false,
+        }).data("kendoWindow").center().open();
+        $(".example").hide();
+    });
+
+</script>
+<style>
+    img{
+        width:40%;
+        height:27%;
+    }
+    #work {
+        background: transparent;
+        height: 100%;
+        width: 100%;
+    }
+
+    html {
+        height: 1000px;
+    }
+
+    #background {
+        height:100%;
+        padding-left: 15px;
+        padding-right: 15px;
+        overflow:hidden;
+        background-image: url(../img/14.jpg);
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+        background-size: cover;
+    }
+</style>

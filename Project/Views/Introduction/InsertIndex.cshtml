@@ -1,0 +1,127 @@
+﻿
+@{
+    ViewBag.Title = "InsertLocation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model Project.Models.Introduction
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>新增景點介紹</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        #insert {
+            list-style-type: none;
+            margin-bottom: 13px;
+        }
+    </style>
+</head>
+<body id="background">
+    <div style="width: 100%; height: 100%; float: left; padding-top:2.5%; padding-right: 15px; padding-left: 15px;">
+        @using (Html.BeginForm("InsertLocation", "Introduction", FormMethod.Post, new { name = "InsertLocation" }))
+        {
+            <div id="opendatagrid">
+                <table id="insert">
+                    <tr>
+                        <td>
+                            @Html.TextBoxFor(Models => Models.LocationName, new { type = "required", required = "required", @class = "k-textbox", placeholder = "請輸入地點名稱" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.TextAreaFor(Models => Models.IntroductionContents, new { type = "required", required = "required", @class = "k-textbox", @rows = "10", @cols = "100" , placeholder = "請輸入地點介紹" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button type="submit" class="k-button">確認送出</button>
+                        </td>
+                    </tr>
+                </table>
+                @Html.TextBoxFor(Models => Models.Lat, new { type = "hidden", @id = "lat" })
+                @Html.TextBoxFor(Models => Models.Lon, new { type = "hidden", @id = "lon" })
+            </div>
+            
+
+        }
+        <div id="GoogleMap" style="float: left;"></div>
+    </div>
+    <script type="text/javascript">
+
+        var num = 0;
+        var lat, lon;
+        $(document).ready(function () {
+            $("#example").show();
+            getLocation();
+
+        });
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showlocation);
+            }
+            else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+        function showlocation(position) {
+            lat = position.coords.latitude;
+            lon = position.coords.longitude;
+            ShowLocalMap();
+        }
+
+
+        function ShowLocalMap() {
+            var mapHolder = document.getElementById("GoogleMap");
+            mapHolder.style.height = "90%";
+            mapHolder.style.width = "80%";
+            $("#lat").val(lat);
+            $("#lon").val(lon);
+            var map = {
+                zoom: 20,
+                center: new google.maps.LatLng(lat, lon),
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+
+            map = new google.maps.Map(mapHolder, map);
+
+            var marker = new google.maps.Marker(
+                {
+                    position: new google.maps.LatLng(lat, lon),
+                    map: map,
+                    draggable: true
+                })
+            google.maps.event.addListener(marker, "dragend", function () {
+                var latvalue = marker.getPosition().lat();
+                var lonvalue = marker.getPosition().lng();
+                
+                $("#lat").val(String(latvalue));
+                $("#lon").val(String(lonvalue));
+            });
+        }
+    </script>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            min-height: 100%;
+            line-height: 30px;
+        }
+
+        #opendatagrid {
+            float: left;
+            height: 85%;
+        }
+    </style>
+
+</body>
+</html>
+
+

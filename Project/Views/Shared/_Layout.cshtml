@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDEZQCK1oifHGahGjAiyuyQ5KbiU3nRE8k"></script>
+    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2016.3.914/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2016.3.914/styles/kendo.default.min.css" />
+    <script src="http://kendo.cdn.telerik.com/2016.3.914/js/jquery.min.js"></script>
+    <script>
+        if (typeof jQuery == "undefined") {
+            // fallback to local jQuery
+            document.write(decodeURIComponent('%3Cscript src="/path/to/local/jquery.min.js" %3E%3C/script%3E'));
+        }
+    </script>
+    <script src="http://kendo.cdn.telerik.com/2016.3.914/js/kendo.all.min.js"></script>
+    <script>
+        if (typeof kendo == "undefined") {
+            // checking for loaded CSS files is cumbersome,
+            // that's why we assume that if the scripts have failed, so have the stylesheets
+
+            // fallback to local Kendo UI stylesheets
+            document.write(decodeURIComponent('%3Clink rel="stylesheet" href="/path/to/local/kendo.common.min.css" %3C/%3E'));
+            document.write(decodeURIComponent('%3Clink rel="stylesheet" href="/path/to/local/kendo.default.min.css" %3C/%3E'));
+
+            // fallback to local Kendo UI scripts
+            document.write(decodeURIComponent('%3Cscript src="/path/to/local/kendo.all.min.js" %3E%3C/script%3E'));
+            // also add kendo.aspnetmvc.min.js or kendo.timezones.min.js, if needed
+        }
+    </script>
+</head>
+<body>
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderBody()
+    @RenderSection("scripts", required: false)
+    <div id="example" style="height: 5%; position:fixed; width: 100%; display:none;" >
+        <div class="menudiv">
+            <ul id="menu">
+                <li>
+                    <a href="../HomePage">首頁</a>
+                </li>
+                <li>
+                    行前準備
+                    <ul>
+                        <li><a href="../OpendataView/Index">景點、美食導覽</a></li>
+                        <li><a href="../OpendataView/LocationIndex">定位搜尋周圍景點</a></li>
+                        </ul>
+                    
+                </li>
+                <li>
+                    景點介紹
+                    <ul>
+                        <li><a href="../Introduction/IntroductionIndex">定位景點介紹</a></li>
+                        <li><a href="../Introduction/InsertIndex">新增景點介紹</a></li>
+                    </ul>
+
+                </li>
+                <li style="float:right;">
+                    使用者
+                    <ul>
+                        <li id="Signout" style="float:right;">
+                            登出
+                        </li>
+                        <li id="updateuser" style="float:right;">
+                            修改
+                        </li>
+                    </ul>
+
+                </li>
+                
+
+            </ul>
+        </div>
+    </div>
+    <div id="window"></div>
+    <script>
+        $(document).ready(function () {
+            $("#menu").kendoMenu({
+            });
+        });
+        $("#Signout").click(function () {
+            sessionStorage.clear();
+            document.location.href = "../Login/Index";
+        });
+        //$("#updateuser").click(function (e) {
+
+        //    document.location.href = "../Login/UpdateUser?useraccount=" + sessionStorage.getItem('useraccount');
+        //});
+        $("#updateuser").click(function () {
+            var datavalue = sessionStorage.getItem('useraccount');
+            console.log(datavalue);
+            $("#window").kendoWindow({
+                width: "400px",
+                height: "250px",
+                title: "修改",
+                actions: ["Refresh", "Close"],
+                content:
+                    {
+                        url: "../Login/UpdateUser",
+                        data: { useraccount: datavalue }
+                    }, 
+                visible: false,
+                modal: true,
+                draggable: false,
+
+            }).data("kendoWindow").center().open();
+            $("#example").hide();
+        });
+    </script>
+    <style>
+        .demo-section .box-col li {
+            margin-bottom: 0;
+        }
+
+        #context-target {
+            cursor: pointer;
+            color: red;
+        }
+
+            #context-target:hover {
+                text-decoration: underline;
+            }
+
+        #background {
+            background-image: url(../img/14.jpg);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            background-size: cover;
+        }
+    </style>
+</body>
+</html>

@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>首頁</title>
+</head>
+<body id="background">
+    <div style="width: 100%; height: 100%; float:left; padding-top:2%; text-align:center; padding-left: 15px;padding-right: 15px;">
+        <div id="logo">
+
+            <img src="~/img/homepage.png" />
+        </div>
+            <div style="width:100%; height:60%;"><div id="mediaplayer"></div></div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    window.onload = function () {
+        $("#example").show();
+    }
+        $(document).ready(function () {
+
+            $("#mediaplayer").kendoMediaPlayer({
+                
+                autoPlay: false,
+                navigatable: true,
+                media: {
+                    source: "https://www.youtube.com/watch?v=uHgbfzNqduc"
+                }
+            });
+        });
+</script>
+<style>
+    html,body {
+                padding: 0;
+                height: 100%;
+                width:100%;
+                min-height: 100%;
+                line-height: 30px;
+                
+            }
+    #mediaplayer{
+                margin:0px auto;
+                width:80%;
+                height:100%;
+    }
+    #logo{
+                margin:50px auto; 
+                width:100%;  
+                height: 22%;
+    }
+    img{
+        width:80%;  
+        height:100%;
+    }
+</style>

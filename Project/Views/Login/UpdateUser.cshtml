@@ -1,0 +1,126 @@
+﻿@model Project.Models.UserDetail
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>修改個人資料</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            min-height: 100%;
+            line-height: 30px;
+            padding-right: 15px;
+        }
+
+        #update {
+            list-style-type: none;
+            margin-bottom: 13px;
+        }
+    </style>
+
+</head>
+<body id="background">
+    <div style="width: 100%; height: 100%; float: left; padding-top:2.5%; padding-right: 15px; padding-left: 15px;">
+        @using (Html.BeginForm("UpdateUserdata", "Login", FormMethod.Post, new { name = "UpdateUserdata" }))
+        {
+            <div class="updateuser">
+                <table id="update" width="90%">
+                    <tr>
+                        <td>
+                            <label for="UserAccount">帳號:</label>
+                        </td>
+                        <td align="right">
+                            @Html.TextBoxFor(Models => Models.UserAccount, new { type = "required", required = "required", Value = ViewBag.UserData[0].UserAccount, @readonly = "readonly", @class = "k-textbox", @style = "margin-left:5%;" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="UserPassword">密碼:</label>
+                        </td>
+                        <td align="right">
+                            @Html.TextBoxFor(Models => Models.UserPassword, new { type = "required", required = "required", Value = ViewBag.UserData[0].UserPassword, @class = "k-textbox", @style = "margin-left:5%;",@onchange = "checkPass()" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="UserPasswordAgain">再次確認密碼:</label>
+                        </td>
+                        <td align="right">
+                            <label id="sign"></label>
+                            <input type="text" class="k-textbox" id="check"  onblur="checkPass()" required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="UserName">名稱:</label>
+                        </td>
+                        <td align="right">
+                            @Html.TextBoxFor(Models => Models.UserName, new { required = "required", Value = ViewBag.UserData[0].UserName, @class = "k-textbox", @style = "margin-left:8%;" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="UserSex">性別:</label>
+                        </td>
+                        <td align="right">
+                            @Html.RadioButtonFor(Models => Models.UserSex, "1", new { required = "required", @class = "UserSex", @style = "margin-left:10%;" }) Male
+                            @Html.RadioButtonFor(Models => Models.UserSex, "2", new { required = "required", @class = "UserSex" }) Female
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="UserEmail">電子郵件:</label>
+                        </td>
+                        <td align="right">
+                            @Html.TextBoxFor(Models => Models.UserEmail, new { type = "email", required = "required", Value = ViewBag.UserData[0].UserEmail, @class = "k-textbox", @style = "margin-left:8%;" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button type="submit" class="k-button" id="button1">確認送出</button>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        }
+    </div>
+
+    <script>
+
+        $(document).ready(function () {
+            $("#example").show();
+            if(@ViewBag.UserData[0].UserSex == 1){
+                document.getElementsByClassName("UserSex")[0].checked=true;
+            }
+            else{
+                document.getElementsByClassName("UserSex")[1].checked=true;
+            }getLocation();
+
+        });
+        $(".textbox").kendoMaskedTextBox();
+
+        function checkPass(){
+            if ($("#UserPassword").val() == $("#check").val())
+            {
+                document.getElementById("sign").style.color = "green";
+                document.getElementById("sign").innerHTML = "V";
+                document.getElementById("button1").disabled = false;
+            }
+            else {
+                document.getElementById("sign").style.color = "red";
+                document.getElementById("sign").innerHTML = "X";
+                document.getElementById("button1").disabled = true
+            }
+        }
+    </script>
+</body>
+</html>
