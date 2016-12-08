@@ -276,7 +276,7 @@
                 var text = document.getElementById("IntroText").value.replace(/\n/g, "<br />");
                 document.getElementById("IntroText").value = "";
                 var localid = sessionStorage.getItem('localid');
-                var userid = essionStorage.getItem('userid');
+                var userid = sessionStorage.getItem('userid');
                 var Intro = {
                     UserId: userid,
                     LocalId: localid,
@@ -350,7 +350,6 @@
                     serverPaging: true,
                     serverFiltering: true,
                     height: "75%",
-                    mobile: true,
                     pageable: {
                         pageSizes: 9
                     },
