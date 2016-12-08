@@ -160,14 +160,7 @@ namespace Project.Controllers
             return RedirectToAction("Index", "Manage");
         }
 
-        //
-        // GET: /Manage/VerifyPhoneNumber
-        //public async Task<ActionResult> VerifyPhoneNumber(string phoneNumber)
-        //{
-        //    //var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), phoneNumber);
-        //    // 透過 SMS 提供者傳送 SMS，以驗證電話號碼
-        //    return phoneNumber == null ? View("Error") : View(new VerifyPhoneNumberViewModel { PhoneNumber = phoneNumber });
-        //}
+        
 
         //
         // POST: /Manage/VerifyPhoneNumber
@@ -361,15 +354,7 @@ namespace Project.Controllers
             return false;
         }
 
-        //private bool HasPhoneNumber()
-        //{
-        //    var user = UserManager.FindById(User.Identity.GetUserId());
-        //    if (user != null)
-        //    {
-        //        return user.PhoneNumber != null;
-        //    }
-        //    return false;
-        //}
+        
 
         public enum ManageMessageId
         {
